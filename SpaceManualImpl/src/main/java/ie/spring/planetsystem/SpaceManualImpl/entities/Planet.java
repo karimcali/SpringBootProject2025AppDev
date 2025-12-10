@@ -21,7 +21,7 @@ public class Planet {
     private String name;
 
     @Column(nullable = false)
-    private String type;           // terrestrial, gas giant etc.
+    private String type;       
 
     @Column(name = "radius_km")
     private Double radiusKm;
