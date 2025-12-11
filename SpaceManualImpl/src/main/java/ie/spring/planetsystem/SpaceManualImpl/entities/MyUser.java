@@ -19,10 +19,10 @@ public class MyUser {
     private String username;
 
     @Column(nullable = false)
-    private String password;   
+    private String password;   // BCrypt hashed
 
     @Column(nullable = false)
-    private String role;      
+    private String role;      // ADMIN, STAFF, STUDENT
 
     private boolean enabled = true;
 

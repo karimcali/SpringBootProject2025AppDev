@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ie.spring.planetsystem.SpaceManualImpl.exceptions.NotFoundException;
+import ie.spring.planetsystem.SpaceManualImpl.mappers.Mappers;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MoonCreateDTO;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MoonDTO;
 
 import java.util.List;
 
@@ -22,64 +26,83 @@ public class MoonServiceImpl implements MoonService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Moon> getAllMoons() {
+    public List<MoonDTO> findAll() {
         log.info("Fetching all moons");
-        return moonRepository.findAll();
+        return moonRepository.findAll()
+                .stream()
+                .map(Mappers::mapMoonToDTO)
+                .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Moon getMoonById(Long id) {
+    public MoonDTO findById(Long id) {
         log.info("Fetching moon by id: {}", id);
-        return moonRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Moon not found with id: " + id));
+        Moon moon = moonRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Moon with id " + id + " not found"));
+        return Mappers.mapMoonToDTO(moon);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Moon> getMoonsByPlanetName(String planetName) {
+    public List<MoonDTO> findByPlanetName(String planetName) {
         log.info("Fetching moons by planet name: {}", planetName);
+
         planetRepository.findByNameIgnoreCase(planetName)
-                .orElseThrow(() -> new RuntimeException("Planet not found with name: " + planetName));
-        
-        return moonRepository.findAllByPlanet_NameIgnoreCase(planetName);
+                .orElseThrow(() -> new NotFoundException("Planet with name '" + planetName + "' not found"));
+
+        return moonRepository.findAllByPlanet_NameIgnoreCase(planetName)
+                .stream()
+                .map(Mappers::mapMoonToDTO)
+                .toList();
     }
 
     @Override
-    public Moon createMoon(Moon moon) {
-        log.info("Creating new moon: {}", moon.getName());
-        
-        Planet planet = moon.getPlanet();
-        if (planet == null || planet.getPlanetId() == null) {
-            throw new RuntimeException("Planet must be specified when creating a moon");
-        }
-        
-        Planet existingPlanet = planetRepository.findById(planet.getPlanetId())
-                .orElseThrow(() -> new RuntimeException("Planet not found with id: " + planet.getPlanetId()));
-        
-        moon.setPlanet(existingPlanet);
-        
+    public MoonDTO createMoon(MoonCreateDTO dto) {
+        log.info("Creating new moon: {} for planet id {}", dto.name(), dto.planetId());
+
+        Planet planet = planetRepository.findById(dto.planetId())
+                .orElseThrow(() -> new NotFoundException("Planet with id " + dto.planetId() + " not found"));
+
+        Moon moon = new Moon();
+        moon.setName(dto.name());
+        moon.setDiameterKm(dto.diameterKm());
+        moon.setOrbitalPeriodDays(dto.orbitalPeriodDays());
+        moon.setPlanet(planet);
+
         Moon savedMoon = moonRepository.save(moon);
         log.info("Moon created successfully with id: {}", savedMoon.getMoonId());
-        return savedMoon;
+        return Mappers.mapMoonToDTO(savedMoon);
     }
 
     @Override
-    public Moon updateMoon(Long id, Moon moon) {
+    public MoonDTO updateMoon(Long id, MoonCreateDTO dto) {
         log.info("Updating moon with id: {}", id);
+
         Moon existingMoon = moonRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Moon not found with id: " + id));
-        
+                .orElseThrow(() -> new NotFoundException("Moon with id " + id + " not found"));
+
+        // If planet id changed, re-associate
+        if (!existingMoon.getPlanet().getPlanetId().equals(dto.planetId())) {
+            Planet planet = planetRepository.findById(dto.planetId())
+                    .orElseThrow(() -> new NotFoundException("Planet with id " + dto.planetId() + " not found"));
+            existingMoon.setPlanet(planet);
+        }
+
+        existingMoon.setName(dto.name());
+        existingMoon.setDiameterKm(dto.diameterKm());
+        existingMoon.setOrbitalPeriodDays(dto.orbitalPeriodDays());
+
         Moon updatedMoon = moonRepository.save(existingMoon);
         log.info("Moon updated successfully: {}", id);
-        return updatedMoon;
+        return Mappers.mapMoonToDTO(updatedMoon);
     }
 
     @Override
-    public void deleteMoon(Long id) {
+    public void deleteById(Long id) {
         log.info("Deleting moon with id: {}", id);
         if (!moonRepository.existsById(id)) {
-            throw new RuntimeException("Moon not found with id: " + id);
+            throw new NotFoundException("Moon with id " + id + " not found");
         }
         moonRepository.deleteById(id);
         log.info("Moon deleted successfully: {}", id);
@@ -87,11 +110,12 @@ public class MoonServiceImpl implements MoonService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countMoonsByPlanetName(String planetName) {
+    public long countByPlanetName(String planetName) {
         log.info("Counting moons for planet name: {}", planetName);
+
         planetRepository.findByNameIgnoreCase(planetName)
-                .orElseThrow(() -> new RuntimeException("Planet not found with name: " + planetName));
-        
+                .orElseThrow(() -> new NotFoundException("Planet with name '" + planetName + "' not found"));
+
         return moonRepository.countByPlanet_NameIgnoreCase(planetName);
     }
 }
