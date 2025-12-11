@@ -22,7 +22,7 @@ public class MyUser {
     private String password;   // BCrypt hashed
 
     @Column(nullable = false)
-    private String role;       // ADMIN, STAFF, STUDENT
+    private String role;      // ADMIN, STAFF, STUDENT
 
     private boolean enabled = true;
 

@@ -1,31 +1,24 @@
 package ie.spring.planetsystem.SpaceManualImpl.service;
 
 import java.util.List;
-
-import ie.spring.planetsystem.SpaceManualImpl.entities.Planet;
+import ie.spring.planetsystem.SpaceManualImpl.dto.PlanetCreateUpdateDTO;
+import ie.spring.planetsystem.SpaceManualImpl.dto.PlanetDTO;
+import ie.spring.planetsystem.SpaceManualImpl.dto.PlanetSummaryDTO;
 
 public interface PlanetService {
+    // READ
 
     /** Get all planets. */
-    List<Planet> getAllPlanets();
+    List<PlanetDTO> findAll();
 
     /** Get planet by ID. */
-    Planet getPlanetById(Long id);
+    PlanetDTO findById(Long id);
 
     /** Get planets by type. */
-    List<Planet> getPlanetsByType(String type);
+    List<PlanetDTO> findByType(String type);
 
-    /** Create a new planet. */
-    Planet createPlanet(Planet planet);
-
-    /** Update planet details. */
-    Planet updatePlanet(Long id, Planet planet);
-
-    /** Delete planet by ID. */
-    void deletePlanet(Long id);
-
-    /** Get planet summary (name and mass only). */
-    PlanetSummary getPlanetSummary(Long id);
+    /** Get planet summary. */
+    PlanetSummaryDTO getPlanetSummary(Long id);
 
     /** Count moons by planet ID. */
     long getMoonCountByPlanetId(Long planetId);
@@ -33,7 +26,17 @@ public interface PlanetService {
     /** Count moons by planet name. */
     long getMoonCountByPlanetName(String planetName);
 
-    /** Planet summary DTO. */
-    record PlanetSummary(Long planetId, String name, Double massKg) {}
+    // WRITE
+
+    /** Create a new planet. */
+    PlanetDTO createPlanet(PlanetCreateUpdateDTO dto);
+
+    /** Update planet details. */
+    PlanetDTO updatePlanet(Long id, PlanetCreateUpdateDTO dto);
+
+    /** Delete planet by ID. */
+    void deletePlanet(Long id);
+
+    
 }
 

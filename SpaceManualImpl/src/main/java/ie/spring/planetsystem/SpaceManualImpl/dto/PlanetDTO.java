@@ -30,6 +30,7 @@ public class PlanetDTO {
     @Positive(message = "Orbital period must be positive")
     private Double orbitalPeriodDays;
 
+    // count injfo we can set in mapper
     private Integer moonCount;
 }
 
