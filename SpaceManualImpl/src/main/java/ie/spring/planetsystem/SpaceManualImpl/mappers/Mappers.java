@@ -56,7 +56,7 @@ public class Mappers {
     }
 
     return new MoonDTO(
-            moon.getMoonId(),
+            moon.getmoonId(),
             moon.getName(),
             moon.getDiameterKm(),
             moon.getOrbitalPeriodDays(),
