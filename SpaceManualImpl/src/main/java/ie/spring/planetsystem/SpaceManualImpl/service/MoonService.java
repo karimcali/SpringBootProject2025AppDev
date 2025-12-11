@@ -2,29 +2,35 @@ package ie.spring.planetsystem.SpaceManualImpl.service;
 
 import java.util.List;
 
-import ie.spring.planetsystem.SpaceManualImpl.entities.Moon;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MoonCreateDTO;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MoonDTO;
 
 public interface MoonService {
+    // READ
 
     /** Get all moons. */
-    List<Moon> getAllMoons();
+    List<MoonDTO> findAll();
 
     /** Get moon by ID. */
-    Moon getMoonById(Long id);
+    MoonDTO findById(Long id);
 
     /** Get moons by planet name. */
-    List<Moon> getMoonsByPlanetName(String planetName);
-
-    /** Create moon (validates planet exists). */
-    Moon createMoon(Moon moon);
-
-    /** Update moon details. */
-    Moon updateMoon(Long id, Moon moon);
-
-    /** Delete moon by ID. */
-    void deleteMoon(Long id);
+    List<MoonDTO> findByPlanetName(String planetName);
 
     /** Count moons by planet name. */
-    long countMoonsByPlanetName(String planetName);
+    long countByPlanetName(String planetName);
+
+    // WRITE
+
+    /** Create moon (validates planet exists). */
+    MoonDTO createMoon(MoonCreateDTO dto);
+
+    /** Update moon details. */
+    MoonDTO updateMoon(Long id, MoonCreateDTO dto);
+
+    /** Delete moon by ID. */
+    void deleteById(Long id);
+
+    
 }
 
