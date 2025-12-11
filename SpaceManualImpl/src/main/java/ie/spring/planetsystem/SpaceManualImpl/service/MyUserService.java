@@ -3,16 +3,21 @@ package ie.spring.planetsystem.SpaceManualImpl.service;
 import java.util.Optional;
 
 import ie.spring.planetsystem.SpaceManualImpl.entities.MyUser;
+import ie.spring.planetsystem.SpaceManualImpl.dto.UserCreateDTO;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MyUserDTO;
 
 public interface MyUserService {
 
     /** Get user by ID (GraphQL). */
-    MyUser getUserById(Long id);
+    MyUserDTO getUserById(Long id);
 
     /** Create user (GraphQL, ADMIN only). */
-    MyUser createUser(MyUser user);
+    MyUserDTO createUser(UserCreateDTO dto);
 
-    /** Find user by username (authentication). */
+    /** Optional: get user as DTO by username (for APIs). */
+    MyUserDTO getUserByUsername(String username);
+
+    /** Internal use (security): entity-based lookup. */
     Optional<MyUser> findByUsername(String username);
 }
 
