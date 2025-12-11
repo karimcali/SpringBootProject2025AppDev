@@ -5,6 +5,8 @@ import ie.spring.planetsystem.SpaceManualImpl.dto.PlanetSummaryDTO;
 import ie.spring.planetsystem.SpaceManualImpl.entities.Planet;
 import ie.spring.planetsystem.SpaceManualImpl.dto.MoonDTO;
 import ie.spring.planetsystem.SpaceManualImpl.entities.Moon;
+import ie.spring.planetsystem.SpaceManualImpl.entities.MyUser;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MyUserDTO;
 
 public class Mappers {
 
@@ -54,7 +56,7 @@ public class Mappers {
     }
 
     return new MoonDTO(
-            moon.getMoonId(),
+            moon.getmoonId(),
             moon.getName(),
             moon.getDiameterKm(),
             moon.getOrbitalPeriodDays(),
@@ -73,9 +75,8 @@ public class Mappers {
         return new MyUserDTO(
                 user.getUserId(),
                 user.getUsername(),
-                user.getRole(),
-                user.isEnabled(),
-                user.isUnlocked()
+                user.getRole()
+                
         );
     }
 }
