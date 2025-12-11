@@ -1,7 +1,7 @@
 package ie.spring.planetsystem.SpaceManualImpl.dto;
 
 public record MoonDTO(
-        Long MoonId,
+        Long moonId,
         String name,
         Double diameterKm,
         Double orbitalPeriodDays,
