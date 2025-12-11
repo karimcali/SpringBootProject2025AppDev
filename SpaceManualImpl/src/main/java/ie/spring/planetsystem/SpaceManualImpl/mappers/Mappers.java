@@ -63,4 +63,19 @@ public class Mappers {
     );
     
     }
+
+
+     public static MyUserDTO mapMyUserToMyUserDTO(MyUser user) {
+        if (user == null) {
+            return null;
+        }
+
+        return new MyUserDTO(
+                user.getUserId(),
+                user.getUsername(),
+                user.getRole(),
+                user.isEnabled(),
+                user.isUnlocked()
+        );
+    }
 }
