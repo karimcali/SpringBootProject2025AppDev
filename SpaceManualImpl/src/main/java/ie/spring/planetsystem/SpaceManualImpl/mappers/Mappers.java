@@ -5,6 +5,8 @@ import ie.spring.planetsystem.SpaceManualImpl.dto.PlanetSummaryDTO;
 import ie.spring.planetsystem.SpaceManualImpl.entities.Planet;
 import ie.spring.planetsystem.SpaceManualImpl.dto.MoonDTO;
 import ie.spring.planetsystem.SpaceManualImpl.entities.Moon;
+import ie.spring.planetsystem.SpaceManualImpl.entities.MyUser;
+import ie.spring.planetsystem.SpaceManualImpl.dto.MyUserDTO;
 
 public class Mappers {
 
