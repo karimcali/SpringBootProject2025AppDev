@@ -75,9 +75,8 @@ public class Mappers {
         return new MyUserDTO(
                 user.getUserId(),
                 user.getUsername(),
-                user.getRole(),
-                user.isEnabled(),
-                user.isUnlocked()
+                user.getRole()
+                
         );
     }
 }
