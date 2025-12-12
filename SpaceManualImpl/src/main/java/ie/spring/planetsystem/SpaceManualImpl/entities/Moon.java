@@ -12,7 +12,7 @@ public class Moon {
       @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "moon_id")
-    private Long moonId;
+    private Long MoonId;
 
     @Column(nullable = false)
     private String name;

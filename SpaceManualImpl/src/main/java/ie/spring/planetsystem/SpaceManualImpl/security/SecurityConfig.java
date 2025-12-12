@@ -27,7 +27,8 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
                 // We used Swagger UI and the H2 console in the labs,
-                // so we keep these endpoints open here to make local testing easier.                .requestMatchers(
+                // so we keep these endpoints open here to make local testing easier.
+                .requestMatchers(
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/h2-console/**"
